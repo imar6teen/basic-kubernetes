@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: app-pod
-          image:
+          image: apper:1.0.0
           imagePullPolicy: Never
           ports:
             - name: app-pod-port

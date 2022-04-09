@@ -17,10 +17,10 @@ spec:
       labels:
         app: mongo
     spec:
+      terminationGracePeriodSeconds: 10
       containers:
         - name: mongo
-          image: mongo
-          imagePullPolicy: Never
+          image: mongo:5.0
           ports:
             - name: mongo-port
               containerPort: 27017
@@ -38,15 +38,15 @@ spec:
           volumeMounts:
             - name: mongo-data
               mountPath: /data/db
-      volumeClaimTemplates:
-        - metadata:
-            name: mongo-data
-          spec:
-            accessModes:
-              - ReadWriteOnce
-            resources:
-              requests:
-                storage: 1Gi
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "standard"
+        resources:
+          requests:
+            storage: 100Mi
 ---
 apiVersion: v1
 kind: Service
