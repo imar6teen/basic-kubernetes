@@ -22,3 +22,56 @@ spec:
           ports:
             - name: app-pod-port
               containerPort: 8080
+          env:
+            - name: MONGO_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: MONGO_HOST
+            - name: MONGO_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: MONGO_PORT
+            - name: MONGO_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: MONGO_DB
+            - name: MONGO_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: MONGO_USER
+            - name: MONGO_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: MONGO_PASS
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: PORT
+            - name: SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: SECRET
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  namespace: default
+  labels:
+    app: app
+spec:
+  type: LoadBalancer
+  ports:
+    - name: app-service-port
+      port: 8080
+      targetPort: app-pod-port
+  selector:
+    app: app
